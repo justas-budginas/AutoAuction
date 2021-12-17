@@ -10,6 +10,7 @@ namespace AutoAukcionas.Data.Repositories
     public interface IBetRepository
     {
         Task<List<Bet>> GetAll(int CountryId, int carId);
+        Task<List<Bet>> GetAll(string UserId);
         Task<Bet> Get(int CountryId, int carId, int betId);
         Task Create(Bet car);
         Task Put(Bet car);
@@ -27,6 +28,11 @@ namespace AutoAukcionas.Data.Repositories
         public async Task<List<Bet>> GetAll(int CountryId, int carId)
         {
             return await _auctionContext.Bet.Where(o => o.Car.CountryId == CountryId && o.CarId == carId).ToListAsync();
+        }
+
+        public async Task<List<Bet>> GetAll(string UserId)
+        {
+            return await _auctionContext.Bet.Where(o => o.UserId == UserId).ToListAsync();
         }
 
         public async Task<Bet> Get(int CountryId, int carId, int betId)

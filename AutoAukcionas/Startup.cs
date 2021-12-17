@@ -36,6 +36,8 @@ namespace AutoAukcionas
                 .AddEntityFrameworkStores<AuctionContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddDirectoryBrowser();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,6 +71,16 @@ namespace AutoAukcionas
             services.AddTransient<IRefreshToken, RefreshToken>();
             services.AddTransient<DatabaseSeeder, DatabaseSeeder>();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 3;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredUniqueChars = 0;
+            });
+
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
             //services.AddSingleton<IRefreshToken>(x => new RefreshToken(x.GetService<IConfiguration>(), x.GetService<IRefreshTokenRepository>(), x.GetService<ITokenManager>()));
         }
@@ -84,6 +96,14 @@ namespace AutoAukcionas
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseStaticFiles();
+
+            app.UseCors(builder => {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            });
 
             app.UseEndpoints(endpoints =>
             {

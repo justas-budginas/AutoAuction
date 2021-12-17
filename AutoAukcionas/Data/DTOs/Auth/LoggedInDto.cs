@@ -5,5 +5,5 @@ using System.Threading.Tasks;
 
 namespace AutoAukcionas.Data.DTOs.Auth
 {
-    public record LoggedInDto(string AccesToken, string RefreshToken);
+    public record LoggedInDto(string AccesToken, string RefreshToken, List<string> roles, string username, string userid);
 }

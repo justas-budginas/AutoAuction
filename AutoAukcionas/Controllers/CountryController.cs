@@ -45,7 +45,7 @@ namespace AutoAukcionas.Controllers
         public async Task<ActionResult<CountryDto>> Create(CountryPostDto dto)
         {
             var exist = await _CountryRepository.Exist(dto.Name);
-            if (exist) return Conflict("This Country already exists!");
+            if (exist) return Conflict(dto.Name + " already exists!");
 
             var Country = _mapper.Map<Country>(dto);
 

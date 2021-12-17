@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace AutoAukcionas.Controllers
 {
@@ -33,6 +34,7 @@ namespace AutoAukcionas.Controllers
         [Route("register")]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
+            List<string> errors = new List<string>();
             var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user != null) return BadRequest("This email is already taken!");
 
@@ -45,9 +47,19 @@ namespace AutoAukcionas.Controllers
             };
 
             var createdUserResult = await _userManager.CreateAsync(newUser, dto.Password);
-            if (!createdUserResult.Succeeded) return BadRequest("Could not create user!");
+            if (!createdUserResult.Succeeded)
+            {
+                foreach (var error in createdUserResult.Errors)
+                {
+                    errors.Add(error.Description);
+                }
 
-            if(dto.Type == "Buyer")
+                var json = JsonSerializer.Serialize(errors);
+
+                return BadRequest(json);
+            }
+
+            if (dto.Type == "Buyer")
             {
                 await _userManager.AddToRoleAsync(newUser, UserRoles.Buyer);
                 return CreatedAtAction(nameof(Register), _mapper.Map<UserDto>(newUser));
@@ -75,9 +87,12 @@ namespace AutoAukcionas.Controllers
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
             if(!isPasswordValid) return BadRequest("Username or password is invalid!");
 
+            var roles = await _userManager.GetRolesAsync(user);
+            var listroles = roles.ToList<string>();
+
             var accessToken = await _tokenManager.CreateAccessTokenAsyc(user);
 
-            return Ok(new LoggedInDto(accessToken.JWTToken, accessToken.RefreshToken));
+            return Ok(new LoggedInDto(accessToken.JWTToken, accessToken.RefreshToken, listroles, user.UserName, user.Id));
 
         }
 

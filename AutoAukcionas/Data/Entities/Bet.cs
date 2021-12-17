@@ -13,6 +13,8 @@ namespace AutoAukcionas.Data.Entities
         public int ID { get; set; }
         public float Betting_price { get; set; }
         public int CarId { get; set; }
+        public int CountryId { get; set; }
+        public Country Country { get; set; }
         public Car Car { get; set; }
         public AuctionUser User { get; set; }
     }

@@ -57,9 +57,12 @@ namespace AutoAukcionas.Controllers
 
             var bet = _mapper.Map<Bet>(dto);
             bet.CarId = CarId;
+            bet.CountryId = CountryId;
             bet.UserId = User.Claims.Where(c => c.Type == "userId").Single().Value;
 
             await _betRepository.Create(bet);
+            car.Price = bet.Betting_price;
+            await _carRepository.Put(car);
             return Created("/api/Country/{CountryId}/car/{CarId}/bet/{bet.ID}", _mapper.Map<BetDto>(bet));
 
         }
@@ -98,6 +101,35 @@ namespace AutoAukcionas.Controllers
             if (!authResult.Succeeded) return Forbid();
 
             await _betRepository.Delete(bet);
+
+            var bets = await _betRepository.GetAll(CountryId, CarId);
+
+            Bet lastbet;
+
+            if(bets.Count > 0)
+            {
+                lastbet = bets.Last();
+            }
+            else
+            {
+                lastbet = null;
+            }
+
+            var car = await _carRepository.Get(CountryId, CarId);
+
+            if(lastbet == null)
+            {
+                car.Price = car.Starting_Price;
+            }
+            else
+            {
+                car.Price = lastbet.Betting_price;
+            }
+
+            
+
+            await _carRepository.Put(car);
+
             return NoContent();
         }
     }

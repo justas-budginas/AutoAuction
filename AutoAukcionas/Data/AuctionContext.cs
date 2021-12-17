@@ -18,8 +18,8 @@ namespace AutoAukcionas.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=AutoAuction");
-            optionsBuilder.UseSqlServer("Server=tcp:autoaukcionasdbserver.database.windows.net,1433;Initial Catalog=AutoAukcionas_db;Persist Security Info=False;User ID=justas;Password=KasSkaitysTasGaidys;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=AutoAuction");
+            //optionsBuilder.UseSqlServer("Server=tcp:autoaukcionasdbserver.database.windows.net,1433;Initial Catalog=AutoAukcionas_db;Persist Security Info=False;User ID=justas;Password=SuperDuperSeceretPassword123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             //optionsBuilder.UseSqlServer(Configuration.GetConnectionString("MyDbConnection"));
         }
     }

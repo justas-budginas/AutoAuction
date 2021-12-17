@@ -194,8 +194,9 @@ namespace AutoAukcionas.Migrations
                     Litrage = table.Column<float>(type: "real", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Starting_Price = table.Column<float>(type: "real", nullable: false),
+                    CarImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CountryId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,7 +206,7 @@ namespace AutoAukcionas.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Car_Country_CountryId",
                         column: x => x.CountryId,
@@ -222,6 +223,7 @@ namespace AutoAukcionas.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Betting_price = table.Column<float>(type: "real", nullable: false),
                     CarId = table.Column<int>(type: "int", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>

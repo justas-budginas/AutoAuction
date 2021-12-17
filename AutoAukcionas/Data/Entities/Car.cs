@@ -1,10 +1,7 @@
 ﻿using AutoAukcionas.Auth.Model;
 using AutoAukcionas.Data.DTOs.Auth;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace AutoAukcionas.Data.Entities
 {
@@ -18,6 +15,7 @@ namespace AutoAukcionas.Data.Entities
         public float Litrage { get; set; }
         public float Price { get; set; }
         public float Starting_Price { get; set; }
+        public string CarImage { get; set; }
         [Required]
         public int CountryId { get; set; }
         public Country Country { get; set; }

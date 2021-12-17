@@ -10,6 +10,8 @@ namespace AutoAukcionas.Data.Repositories
     public interface ICarRepository
     {
         Task<List<Car>> GetAll(int CountryId);
+        Task<List<Car>> GetAll(string UserId);
+        Task<List<Car>> GetAllCars();
         Task<Car> Get(int CountryId, int carId);
         Task Create(Car car);
         Task Put(Car car);
@@ -27,6 +29,16 @@ namespace AutoAukcionas.Data.Repositories
         public async Task<List<Car>> GetAll(int CountryId)
         {
             return await _auctionContext.Car.Where(o => o.Country.ID == CountryId).ToListAsync();
+        }
+
+        public async Task<List<Car>> GetAll(string UserId)
+        {
+            return await _auctionContext.Car.Where(o=> o.UserId == UserId).ToListAsync();
+        }
+
+        public async Task<List<Car>> GetAllCars()
+        {
+            return await _auctionContext.Car.ToListAsync();
         }
 
         public async Task<Car> Get(int CountryId, int carId)
